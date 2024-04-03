@@ -143,25 +143,56 @@ CREATE OR ALTER PROC SP_ADD_DETALLE_PEDIDO(
 END
 
 
-CREATE PROC SP_LISTAR_USUARIOS(
+CREATE OR ALTER PROC SP_LISTAR_USUARIOS(
 	@rol VARCHAR (40)
 )AS BEGIN
-	SELECT * FROM Usuario U INNER JOIN Rol R ON U.idRol=r.id where r.nombre like @rol
+	SELECT  U.id AS idPersona,
+			U.correo AS Nombre,
+			U.telefono AS tepefono,
+			U.puesto AS puesto,
+			U.idRol AS idRol,
+			R.nombre As Rol
+	FROM Usuario U INNER JOIN Rol R ON U.idRol=r.id where r.nombre like @rol
 END
 
-CREATE PROC SP_LISTAR_PRODUCTOS(
+CREATE OR ALTER PROC SP_LISTAR_PRODUCTOS(
 	@SKU INT
 )AS BEGIN
-	SELECT * FROM Producto p INNER JOIN TipoProducto T ON P.idTipoProducto=T.id 
-							 INNER JOIN UnidadMedida U ON P.idUnidadMedida=U.id
+	SELECT P.sku,
+		   P.nombre,
+		   P.stock,
+		   P.etiquetas,
+		   P.precio,
+		   p.idTipoProducto,
+		   p.idUnidadMedida,
+		   T.nombre AS tipo,
+		   U.nombre AS unidadMedida
+	
+	FROM Producto P INNER JOIN TipoProducto T ON P.idTipoProducto=T.id 
+					INNER JOIN UnidadMedida U ON P.idUnidadMedida=U.id
 	where P.sku like @SKU
 END
 
 CREATE OR ALTER PROC SP_LISTAR_DETALLE_PEDIDO(
-	@PEDIDO INT 
+	@pedido INT 
 )AS BEGIN
-	SELECT * FROM Pedido P INNER JOIN DetallePedido D ON P.numeroPedido=D.numeroPedido
+	SELECT 
+	P.numeroPedido,
+	P.fechaPedido,
+	P.fechaRecepcion,
+	P.fechaDespacho,
+	P.fechaEntrega,
+	PR.sku,
+	PR.nombre AS NombreProducto,
+	D.cantidad,
+	PR.precio,
+	D.total,
+	UV.nombre AS vendedor,
+	UR.nombre AS repartidor
+	FROM Pedido P INNER JOIN DetallePedido D ON P.numeroPedido=D.numeroPedido
 	INNER JOIN Producto PR  ON D.idproducto=PR.sku
+	INNER JOIN Usuario UV ON P.idVendedor=UV.id
+	INNER JOIN Usuario UR ON P.idRepartidor=UR.id
 	WHERE P.numeroPedido LIKE @PEDIDO
 END
 

@@ -21,4 +21,13 @@ namespace Entidades
         public string? token { get; set; }  
 
     }
+    public class UsuarioGet
+    {
+        public int idPersona { get; set; }
+        public string? Nombre { get; set; }
+        public string? tepefono { get; set; }
+        public string? puesto { get; set; }
+        public int idRol { get; set; }
+        public string? Rol { get; set; }
+    }
 }

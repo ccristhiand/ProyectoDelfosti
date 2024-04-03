@@ -10,6 +10,7 @@ namespace Model
     {
         Task<List<Result>> Post(Entidades.Pedido pedido);
         Task<Result> Patch(int Estado, int numeroPedido);
+        Task<List<DetallePedido>> Get(int pedido);
     }
     public class Pedido : IPedido
     {
@@ -98,6 +99,26 @@ namespace Model
                     con.Open();
                     var result = con.QuerySingleOrDefault<Result>("SP_ADD_DETALLE_PEDIDO", parameters, commandType: CommandType.StoredProcedure);
                     return result;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<DetallePedido>> Get(int pedido)
+        {
+            try
+            {
+                using (var con = new SqlConnection(_configuration.GetConnectionString("Dev")))
+                {
+                    List<DetallePedido> detallePedido = new List<DetallePedido>();
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.AddDynamicParams(new { pedido });
+                    con.Open();
+                    detallePedido =( await con.QueryAsync<DetallePedido>("SP_LISTAR_DETALLE_PEDIDO", parameters, commandType: CommandType.StoredProcedure)).ToList();
+                    return detallePedido;
                 }
             }
             catch (Exception)

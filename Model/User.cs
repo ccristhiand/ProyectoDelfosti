@@ -9,6 +9,7 @@ namespace Model
     public interface IUser
     {
         Task<Usuario> Login(string correo, string password);
+        Task<List<UsuarioGet>> Get(int rol);
     }
     public class User : IUser
     {
@@ -16,6 +17,26 @@ namespace Model
         public User(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        public async Task<List<UsuarioGet>> Get(int rol)
+        {
+            try
+            {
+                using (var con = new SqlConnection(_configuration.GetConnectionString("Dev")))
+                {
+                    List<UsuarioGet> usuario = new List<UsuarioGet>();
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.AddDynamicParams(new { rol });
+                    con.Open();
+                    usuario = (await con.QueryAsync<UsuarioGet>("SP_LISTAR_USUARIOS", parameters, commandType: CommandType.StoredProcedure)).ToList();
+                    return usuario;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Usuario> Login(string correo, string password)

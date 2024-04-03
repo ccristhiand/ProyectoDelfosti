@@ -15,5 +15,7 @@ namespace Entidades
         public string? etiquetas { get; set; }
         public double precio { get; set; }
         public int idUnidadMedida { get; set; }
+        public string? tipo {  get; set; }
+        public string? unidadMedida { get; set; }
     }
 }
