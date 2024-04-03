@@ -66,7 +66,7 @@ podemos consultar la bd que esta en la nube para realizar las consultas especifi
 
 ## Installation
 ***
-$ git clone ccristhiand/ProyectoDelfosti
+$ git clone https://github.com/ccristhiand/ProyectoDelfosti.git
 $ open proyect in Visual Studio
 $ start.
 
