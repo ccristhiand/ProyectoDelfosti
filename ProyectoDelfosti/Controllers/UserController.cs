@@ -63,7 +63,7 @@ namespace ProyectoDelfosti.Controllers
         
         [Authorize(Roles =("Encargado"))]
         [HttpGet]
-        public async Task<IActionResult>Get(int rol)
+        public async Task<IActionResult>Get(string rol)
         {
             try
             {

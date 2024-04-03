@@ -9,7 +9,7 @@ namespace Model
     public interface IUser
     {
         Task<Usuario> Login(string correo, string password);
-        Task<List<UsuarioGet>> Get(int rol);
+        Task<List<UsuarioGet>> Get(string rol);
     }
     public class User : IUser
     {
@@ -18,7 +18,7 @@ namespace Model
         {
             _configuration = configuration;
         }
-        public async Task<List<UsuarioGet>> Get(int rol)
+        public async Task<List<UsuarioGet>> Get(string rol)
         {
             try
             {
