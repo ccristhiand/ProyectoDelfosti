@@ -18,7 +18,6 @@ namespace Model
         {
             _configuration = configuration;
         }
-
         public async Task<List<UsuarioGet>> Get(int rol)
         {
             try
@@ -38,7 +37,6 @@ namespace Model
                 throw;
             }
         }
-
         public async Task<Usuario> Login(string correo, string password)
         {
             try

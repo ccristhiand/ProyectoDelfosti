@@ -42,5 +42,20 @@ namespace ProyectoDelfosti.Controllers
                 return BadRequest();
             }
         }
+
+        [Authorize(Roles = "Encargado,Vendedor,Delivery,Repartidor")]
+        [HttpGet]
+        public async Task<IActionResult> Get(int pedido)
+        {
+            try
+            {
+                return Ok(await new Model.Pedido(_configuration).Get(pedido));
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+        }
     }
 }

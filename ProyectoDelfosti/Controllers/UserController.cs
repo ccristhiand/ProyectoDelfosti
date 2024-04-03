@@ -20,7 +20,7 @@ namespace ProyectoDelfosti.Controllers
         private string _secret;
         public UserController(IConfiguration configuration)
         {
-            _configuration=configuration;
+            _configuration = configuration;
             _secret = configuration.GetValue<string>("ApiSettings:secret");
         }
 
@@ -58,6 +58,20 @@ namespace ProyectoDelfosti.Controllers
             catch (Exception)
             {
                 return BadRequest();
+            }
+        }
+        
+        [Authorize(Roles =("Encargado"))]
+        [HttpGet]
+        public async Task<IActionResult>Get(int rol)
+        {
+            try
+            {
+                return Ok(await new User(_configuration).Get(rol)) ;
+            }
+            catch (Exception)
+            {
+               return  BadRequest();
             }
         }
     }
