@@ -5,7 +5,6 @@ using Model;
 
 namespace ProyectoDelfosti.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("pedido")]
     public class PedidoController : ControllerBase
@@ -15,6 +14,7 @@ namespace ProyectoDelfosti.Controllers
         {
             _configuration = configuration;
         }
+        [Authorize(Roles ="Encargado,Vendedor")]
         [HttpPost]
         public async Task<IActionResult> Post(Entidades.Pedido pedido)
         {
@@ -28,6 +28,7 @@ namespace ProyectoDelfosti.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Roles = "Encargado,Delivery,Repartidor")]
         [HttpPatch]
         public async Task<IActionResult> Patch(int Estado, int numeroPedido)
         {
