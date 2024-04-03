@@ -141,3 +141,28 @@ CREATE OR ALTER PROC SP_ADD_DETALLE_PEDIDO(
 		SELECT 'Producto '+@nombreProducto+' Sin stock' as result
 	END
 END
+
+
+CREATE PROC SP_LISTAR_USUARIOS(
+	@rol VARCHAR (40)
+)AS BEGIN
+	SELECT * FROM Usuario U INNER JOIN Rol R ON U.idRol=r.id where r.nombre like @rol
+END
+
+CREATE PROC SP_LISTAR_PRODUCTOS(
+	@SKU INT
+)AS BEGIN
+	SELECT * FROM Producto p INNER JOIN TipoProducto T ON P.idTipoProducto=T.id 
+							 INNER JOIN UnidadMedida U ON P.idUnidadMedida=U.id
+	where P.sku like @SKU
+END
+
+CREATE OR ALTER PROC SP_LISTAR_DETALLE_PEDIDO(
+	@PEDIDO INT 
+)AS BEGIN
+	SELECT * FROM Pedido P INNER JOIN DetallePedido D ON P.numeroPedido=D.numeroPedido
+	INNER JOIN Producto PR  ON D.idproducto=PR.sku
+	WHERE P.numeroPedido LIKE @PEDIDO
+END
+
+
