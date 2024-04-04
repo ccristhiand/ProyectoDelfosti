@@ -15,12 +15,14 @@ namespace ProyectoDelfosti.Controllers
             _configuration = configuration;
         }
 
-        [Authorize(Roles = ("Encargado"))]
+        //[Authorize(Roles = ("Encargado"))]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Get(int sku)
+        public async Task<IActionResult> Get(int? sku)
         {
             try
             {
+                sku = sku==null ? 0:sku;
                 return Ok(await new Producto(_configuration).Get(sku));
             }
             catch (Exception)

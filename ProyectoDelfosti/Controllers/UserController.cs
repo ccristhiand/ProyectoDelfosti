@@ -8,6 +8,7 @@ using System.Text;
 using System;
 using Entidades;
 using Microsoft.AspNetCore.Authorization;
+using Entidades.request;
 
 namespace ProyectoDelfosti.Controllers
 {
@@ -25,12 +26,12 @@ namespace ProyectoDelfosti.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string correo, string password)
+        public async Task<IActionResult> Login(login login)
         {
             try
             {
                 Usuario usuario = new Usuario();
-                usuario = await new User(_configuration).Login(correo, password);
+                usuario = await new User(_configuration).Login(login.correo, login.password);
 
                 if (usuario.result == "Inicio de sesion Exitoso")
                 {
@@ -60,13 +61,15 @@ namespace ProyectoDelfosti.Controllers
                 return BadRequest();
             }
         }
-        
-        [Authorize(Roles =("Encargado"))]
+
+        //[Authorize(Roles =("Encargado"))]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult>Get(string rol)
+        public async Task<IActionResult>Get(string? rol)
         {
             try
             {
+                rol= rol ?? string.Empty;
                 return Ok(await new User(_configuration).Get(rol)) ;
             }
             catch (Exception)

@@ -143,21 +143,38 @@ CREATE OR ALTER PROC SP_ADD_DETALLE_PEDIDO(
 END
 
 
-CREATE OR ALTER PROC SP_LISTAR_USUARIOS(
+CREATE OR ALTER PROC SP_LISTAR_USUARIOS2(
 	@rol VARCHAR (40)
 )AS BEGIN
 	SELECT  U.id AS idPersona,
-			U.correo AS Nombre,
-			U.telefono AS tepefono,
+			U.correo AS Correo,
+			U.telefono AS telefono,
 			U.puesto AS puesto,
 			U.idRol AS idRol,
 			R.nombre As Rol
-	FROM Usuario U INNER JOIN Rol R ON U.idRol=r.id where r.nombre like @rol
+	FROM Usuario U INNER JOIN Rol R ON U.idRol=r.id where r.nombre like '%'+@rol+'%'
 END
 
 CREATE OR ALTER PROC SP_LISTAR_PRODUCTOS(
 	@SKU INT
 )AS BEGIN
+	IF @SKU =0
+	BEGIN
+		SELECT P.sku,
+		   P.nombre,
+		   P.stock,
+		   P.etiquetas,
+		   P.precio,
+		   p.idTipoProducto,
+		   p.idUnidadMedida,
+		   T.nombre AS tipo,
+		   U.nombre AS unidadMedida
+	
+	FROM Producto P INNER JOIN TipoProducto T ON P.idTipoProducto=T.id 
+					INNER JOIN UnidadMedida U ON P.idUnidadMedida=U.id
+	END
+	ELSE
+	BEGIN
 	SELECT P.sku,
 		   P.nombre,
 		   P.stock,
@@ -170,7 +187,8 @@ CREATE OR ALTER PROC SP_LISTAR_PRODUCTOS(
 	
 	FROM Producto P INNER JOIN TipoProducto T ON P.idTipoProducto=T.id 
 					INNER JOIN UnidadMedida U ON P.idUnidadMedida=U.id
-	where P.sku like @SKU
+	where P.sku =@SKU
+	END
 END
 
 CREATE OR ALTER PROC SP_LISTAR_DETALLE_PEDIDO(
@@ -193,7 +211,7 @@ CREATE OR ALTER PROC SP_LISTAR_DETALLE_PEDIDO(
 	INNER JOIN Producto PR  ON D.idproducto=PR.sku
 	INNER JOIN Usuario UV ON P.idVendedor=UV.id
 	INNER JOIN Usuario UR ON P.idRepartidor=UR.id
-	WHERE P.numeroPedido LIKE @PEDIDO
+	WHERE P.numeroPedido= @PEDIDO 
 END
 
 

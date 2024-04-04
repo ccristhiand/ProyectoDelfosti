@@ -13,7 +13,7 @@ namespace Model
 {
     public interface IProducto
     {
-        Task<List<Entidades.Producto>> Get(int sku);
+        Task<List<Entidades.Producto>> Get(int? sku);
     }
     public class Producto : IProducto
     {
@@ -22,10 +22,11 @@ namespace Model
         {
             _configuration = configuration;
         }
-        public async Task<List<Entidades.Producto>> Get(int sku)
+        public async Task<List<Entidades.Producto>> Get(int? sku)
         {
             try
             {
+                
                 using (var con = new SqlConnection(_configuration.GetConnectionString("Dev")))
                 {
                     List<Entidades.Producto> Producto = new List<Entidades.Producto>();

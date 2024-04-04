@@ -9,7 +9,7 @@ namespace Model
     public interface IUser
     {
         Task<Usuario> Login(string correo, string password);
-        Task<List<UsuarioGet>> Get(string rol);
+        Task<IEnumerable<UsuarioOtro>> Get(string rol);
     }
     public class User : IUser
     {
@@ -18,17 +18,17 @@ namespace Model
         {
             _configuration = configuration;
         }
-        public async Task<List<UsuarioGet>> Get(string rol)
+        public async Task<IEnumerable<UsuarioOtro>> Get(string rol)
         {
             try
             {
                 using (var con = new SqlConnection(_configuration.GetConnectionString("Dev")))
                 {
-                    List<UsuarioGet> usuario = new List<UsuarioGet>();
+                    IEnumerable<UsuarioOtro> usuario = new List<UsuarioOtro>();
                     DynamicParameters parameters = new DynamicParameters();
                     parameters.AddDynamicParams(new { rol });
                     con.Open();
-                    usuario = (await con.QueryAsync<UsuarioGet>("SP_LISTAR_USUARIOS", parameters, commandType: CommandType.StoredProcedure)).ToList();
+                    usuario = (await con.QueryAsync<UsuarioOtro>("SP_LISTAR_USUARIOS2", parameters, commandType: CommandType.StoredProcedure));
                     return usuario;
                 }
             }

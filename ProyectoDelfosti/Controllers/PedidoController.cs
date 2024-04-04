@@ -43,7 +43,8 @@ namespace ProyectoDelfosti.Controllers
             }
         }
 
-        [Authorize(Roles = "Encargado,Vendedor,Delivery,Repartidor")]
+        //[Authorize(Roles = "Encargado,Vendedor,Delivery,Repartidor")]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get(int pedido)
         {
